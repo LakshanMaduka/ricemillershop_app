@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "712352325035",
+    "project_id": "veemola-a212b",
+    "storage_bucket": "veemola-a212b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712352325035:android:f4fc59d742b4b365e446ee",
+        "android_client_info": {
+          "package_name": "com.example.application_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "712352325035-6irov0mje0mt7ja1ptmt36nofthhhegl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQ2Gm_gyIaTOl53EX0yjdta-vEeGpqVU0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "712352325035-6irov0mje0mt7ja1ptmt36nofthhhegl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

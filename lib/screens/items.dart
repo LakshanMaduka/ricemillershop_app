@@ -42,46 +42,24 @@ class ItemScreen extends StatelessWidget {
               function: () => showModalBottomSheet(
                   context: context,
                   builder: (context) => BottomScreen(
-                        name: "හාල් පිටි",
+                        name: "හාල් පිටි/මුං",
                         price: 5.0,
                       )),
               imgName: "piti.png",
-              name: "හාල් පිටි",
+              name: "හාල් පිටි/මුං",
               color: Colors.teal,
             ),
             ITile(
               function: () => showModalBottomSheet(
                   context: context,
                   builder: (context) => BottomScreen(
-                        name: "මිරිස් කුඩු",
+                        name: "මිරිස්/කහ/සිල්ලර",
                         price: 5.0,
                       )),
               imgName: "miriskudu.png",
-              name: 'මිරිස් කුඩු',
+              name: 'මිරිස්/කහ/සිල්ලර',
               color: Colors.orange,
             ),
-            ITile(
-              function: () => showModalBottomSheet(
-                  context: context,
-                  builder: (context) => BottomScreen(
-                        name: "කෑලි මිරිස්",
-                        price: 5.0,
-                      )),
-              imgName: "kalimiris.png",
-              name: 'කෑලි මිරිස්',
-              color: Colors.pink,
-            ),
-            ITile(
-              function: () => showModalBottomSheet(
-                  context: context,
-                  builder: (context) => BottomScreen(
-                        name: "කහ කුඩ",
-                        price: 5.0,
-                      )),
-              imgName: "kaha.png",
-              name: 'කහ කුඩු',
-              color: Colors.purple,
-            )
           ]),
         ),
       ),

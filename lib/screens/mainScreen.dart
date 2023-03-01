@@ -10,7 +10,7 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Esandi vee mola'),
+        title: Text('Esandi rice miller shop'),
       ),
       body: Center(
         child: GridView.count(crossAxisCount: 2, shrinkWrap: true, children: [
@@ -24,6 +24,7 @@ class MainScreen extends StatelessWidget {
             name: "ආදායම්",
             icon: Icons.attach_money,
             color: Colors.purple,
+            function: (() => Navigator.pushNamed(context, 'incomeScreen')),
           ),
           GTile(
             name: "වියදම්",
@@ -34,6 +35,7 @@ class MainScreen extends StatelessWidget {
             name: "සැකසුම්",
             icon: Icons.settings,
             color: Colors.pink,
+            function: (() => Navigator.pushNamed(context, 'settingScreen')),
           ),
           GTile(
             name: "ලාභය",

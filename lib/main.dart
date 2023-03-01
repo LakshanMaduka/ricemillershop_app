@@ -1,7 +1,9 @@
 import 'package:application_1/providers/billList.dart';
 import 'package:application_1/screens/bill_list_screen.dart';
+import 'package:application_1/screens/incomeScreen.dart';
 import 'package:application_1/screens/items.dart';
 import 'package:application_1/screens/mainScreen.dart';
+import 'package:application_1/screens/settingScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,9 +39,13 @@ class MyApp extends StatelessWidget {
               ),
               //home: MainScreen(),
               routes: {
-                '/': (context) => MainScreen(),
+                '/': (context) => MainScreen()
+                //MainScreen()
+                ,
                 'itemScreen': (context) => ItemScreen(),
                 'billScreen': (context) => BillListScreen(),
+                'incomeScreen': (context) => IncomeScreen(),
+                'settingScreen': (context) => SettingScreen()
               },
             );
           }),

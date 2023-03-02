@@ -4,14 +4,37 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../components/ItemTile.dart';
+import '../providers/billList.dart';
 
-class ItemScreen extends StatelessWidget {
+class ItemScreen extends StatefulWidget {
   const ItemScreen({Key? key}) : super(key: key);
 
   @override
+  State<ItemScreen> createState() => _ItemScreenState();
+}
+
+class _ItemScreenState extends State<ItemScreen> {
+  bool isLoading = false;
+  @override
+  void initState() {
+    Future.delayed(Duration.zero).then(((value) {
+      setState(() {
+        isLoading = true;
+      });
+      final billProvider =
+          Provider.of<BillListprovider>(context, listen: false);
+      billProvider.getPrices();
+    }));
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final billProvider = Provider.of<BillListprovider>(context, listen: false);
     return Scaffold(
       body: Center(
         child: Container(
@@ -21,7 +44,7 @@ class ItemScreen extends StatelessWidget {
                   context: context,
                   builder: (context) => BottomScreen(
                         name: "වී",
-                        price: 5.0,
+                        price: double.parse(billProvider.paddy!),
                       )),
               imgName: "vee.png",
               name: "වී",
@@ -32,7 +55,7 @@ class ItemScreen extends StatelessWidget {
                   context: context,
                   builder: (context) => BottomScreen(
                         name: "පොල්තෙල්",
-                        price: 5.0,
+                        price: double.parse(billProvider.coconut!),
                       )),
               imgName: "polthel.png",
               name: 'පොල්තෙල්',
@@ -43,7 +66,7 @@ class ItemScreen extends StatelessWidget {
                   context: context,
                   builder: (context) => BottomScreen(
                         name: "හාල් පිටි/මුං",
-                        price: 5.0,
+                        price: double.parse(billProvider.rice!),
                       )),
               imgName: "piti.png",
               name: "හාල් පිටි/මුං",
@@ -54,7 +77,7 @@ class ItemScreen extends StatelessWidget {
                   context: context,
                   builder: (context) => BottomScreen(
                         name: "මිරිස්/කහ/සිල්ලර",
-                        price: 5.0,
+                        price: double.parse(billProvider.chilly!),
                       )),
               imgName: "miriskudu.png",
               name: 'මිරිස්/කහ/සිල්ලර',

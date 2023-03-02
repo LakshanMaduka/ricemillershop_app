@@ -53,13 +53,13 @@ class _BottomScreenState extends State<BottomScreen> {
                   'කිලෝ ගණන',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 15,
                     color: Colors.lightBlueAccent,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 TextField(
-                  onSubmitted: (value) {
+                  onChanged: (value) {
                     setState(() {
                       totalKg = value;
                     });
@@ -108,7 +108,3 @@ class _BottomScreenState extends State<BottomScreen> {
         ));
   }
 }
-
-    
-
-       

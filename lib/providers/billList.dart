@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:application_1/providers/Bill.dart';
 import 'package:application_1/providers/ListOfBills.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,8 +13,14 @@ class BillListprovider extends ChangeNotifier {
     return UnmodifiableListView(_bills);
   }
 
+  double? total = 0;
+  String? rice = null;
+  String? paddy = null;
+  String? chilly = null;
+  String? coconut = null;
+
   var mymap = {};
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  //FirebaseFirestore firestore = FirebaseFirestore.instance;
   // void fireSFunction() async {
   //   CollectionReference ebills = firestore.collection("ebills");
   //   var bList = bills.map((e) => e.toJson()).toList();
@@ -27,10 +34,13 @@ class BillListprovider extends ChangeNotifier {
       String? dateTime,
       double? amount,
       double? total}) async {
-    CollectionReference ebills = firestore.collection("ebills");
+    CollectionReference ebills =
+        FirebaseFirestore.instance.collection("ebills");
     await ebills
         .doc(DateFormat('yyyy-MM-dd  KK:mm:ss').format(DateTime.now()))
         .set({
+      'day': DateFormat('dd').format(DateTime.now()),
+      'month': DateFormat('MM').format(DateTime.now()),
       'dateTilme': DateFormat('yyyy-MM-dd  KK:mm:ss').format(DateTime.now()),
       'list': bills.map((e) => e.toJson()).toList(),
     });
@@ -62,7 +72,41 @@ class BillListprovider extends ChangeNotifier {
   //     .map((snapshot) =>
   //         snapshot.docs.map((e) => ListOfBills.fromJson(e.data())).toList());
 
-  void billListGenerate() {}
+  void getPrices() {
+    // final prices = firestore.collection('prices').doc('prices').get();
+
+    FirebaseFirestore.instance
+        .collection('prices')
+        .doc('prices')
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        final Map<String, dynamic> data =
+            documentSnapshot.data() as Map<String, dynamic>;
+        rice = data['හාල්-මුං'];
+        paddy = data['වී'];
+        chilly = data['මිරිස්-සිල්ලර-කහ'];
+        coconut = data['පොල්තෙල්'];
+      }
+    });
+
+    // print(prices);
+  }
+
+  void calculateIncomeDay() {
+    FirebaseFirestore.instance
+        .collection('ebills')
+        .where(
+          'day',
+          isEqualTo: DateFormat('dd').format(DateTime.now()),
+        )
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        element.data()['list'].map((e) => total = total! + e['total']).toList();
+      });
+    });
+  }
 
   void removeTask(int index) {
     _bills.removeAt(index);

@@ -101,7 +101,7 @@ class _BillListScreenState extends State<BillListScreen> {
                                 text: 'Do you want to cancel the bill?',
                                 onConfirmBtnTap: () {
                                   Navigator.pop(context);
-                                  Navigator.pushReplacementNamed(context, '/');
+                                  Navigator.popAndPushNamed(context, '/');
                                 },
                                 context: context,
                                 type: QuickAlertType.confirm);

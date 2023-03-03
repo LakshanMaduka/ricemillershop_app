@@ -25,99 +25,103 @@ class _BillListScreenState extends State<BillListScreen> {
         //bottomNavigationBar: BottomNavigationBar(items: []),
         body: isLoading
             ? Center(child: const CircularProgressIndicator())
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                      height: MediaQuery.of(context).size.height * 0.7,
-                      child: BillView()),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.1,
-                    color: Colors.amber,
-                    child: Row(
+            : SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                        height: MediaQuery.of(context).size.height * 0.7,
+                        child: BillView()),
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.1,
+                      color: Colors.amber,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              "Total",
+                              style: TextStyle(fontSize: 25),
+                            ),
+                            Consumer<BillListprovider>(
+                                builder: (context, value, child) {
+                              return Text(
+                                "රු. " + value.gettotal().toString(),
+                                style: TextStyle(fontSize: 25),
+                              );
+                            })
+                          ]),
+                    ),
+                    Container(
+                      //height: MediaQuery.of(context).size.height * 0.05,
+                      color: Colors.white,
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Text(
-                            "Total",
-                            style: TextStyle(fontSize: 25),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.of(context).pushNamed('itemScreen');
+                            },
+                            child: const Text('Add'),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.lightBlue),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                            ),
                           ),
-                          Consumer<BillListprovider>(
-                              builder: (context, value, child) {
-                            return Text(
-                              "රු. " + value.gettotal().toString(),
-                              style: TextStyle(fontSize: 25),
-                            );
-                          })
-                        ]),
-                  ),
-                  Container(
-                    //height: MediaQuery.of(context).size.height * 0.05,
-                    color: Colors.white,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.of(context).pushNamed('itemScreen');
-                          },
-                          child: const Text('Add'),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Colors.lightBlue),
-                            foregroundColor:
-                                MaterialStateProperty.all<Color>(Colors.white),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            setState(() {
-                              isLoading = true;
-                            });
-                            QuickAlert.show(
-                                text: 'Successfully saved the bill',
-                                onConfirmBtnTap: () {
-                                  billProvider.emtyList();
-                                  Navigator.pop(context);
-                                  Navigator.pushReplacementNamed(context, '/');
-                                },
-                                context: context,
-                                type: QuickAlertType.success);
+                          TextButton(
+                            onPressed: () async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              QuickAlert.show(
+                                  text: 'Successfully saved the bill',
+                                  onConfirmBtnTap: () {
+                                    billProvider.emtyList();
+                                    billProvider.calculateIncomeDay();
+                                    Navigator.pop(context);
+                                    Navigator.pushReplacementNamed(
+                                        context, '/');
+                                  },
+                                  context: context,
+                                  type: QuickAlertType.success);
 
-                            await billProvider.fireSFunction();
-                          },
-                          child: const Text('Save'),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Colors.lightBlue),
-                            foregroundColor:
-                                MaterialStateProperty.all<Color>(Colors.white),
+                              await billProvider.fireSFunction();
+                            },
+                            child: const Text('Save'),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.lightBlue),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                            ),
                           ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            billProvider.emtyList();
-                            QuickAlert.show(
-                                text: 'Do you want to cancel the bill?',
-                                onConfirmBtnTap: () {
-                                  Navigator.pop(context);
-                                  Navigator.popAndPushNamed(context, '/');
-                                },
-                                context: context,
-                                type: QuickAlertType.confirm);
-                          },
-                          child: const Text('Cancel'),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Colors.lightBlue),
-                            foregroundColor:
-                                MaterialStateProperty.all<Color>(Colors.white),
+                          TextButton(
+                            onPressed: () {
+                              billProvider.emtyList();
+                              QuickAlert.show(
+                                  text: 'Do you want to cancel the bill?',
+                                  onConfirmBtnTap: () {
+                                    Navigator.pop(context);
+                                    Navigator.popAndPushNamed(context, '/');
+                                  },
+                                  context: context,
+                                  type: QuickAlertType.confirm);
+                            },
+                            child: const Text('Cancel'),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.lightBlue),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ));
   }
 }

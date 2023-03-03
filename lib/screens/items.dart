@@ -18,74 +18,93 @@ class ItemScreen extends StatefulWidget {
 
 class _ItemScreenState extends State<ItemScreen> {
   bool isLoading = false;
+  bool _isinit = true;
   @override
   void initState() {
-    Future.delayed(Duration.zero).then(((value) {
-      setState(() {
-        isLoading = true;
-      });
-      final billProvider =
-          Provider.of<BillListprovider>(context, listen: false);
-      billProvider.getPrices();
-    }));
-
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    setState(() {
+      isLoading = true;
+    });
+    if (_isinit) {
+      Provider.of<BillListprovider>(context, listen: false)
+          .getPrices()
+          .then((value) {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    }
+    _isinit = false;
+
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     final billProvider = Provider.of<BillListprovider>(context, listen: false);
     return Scaffold(
-      body: Center(
-        child: Container(
-          child: GridView.count(crossAxisCount: 2, shrinkWrap: true, children: [
-            ITile(
-              function: () => showModalBottomSheet(
-                  context: context,
-                  builder: (context) => BottomScreen(
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Center(
+              child: Container(
+                child: GridView.count(
+                    crossAxisCount: 2,
+                    shrinkWrap: true,
+                    children: [
+                      ITile(
+                        function: () => showModalBottomSheet(
+                            context: context,
+                            builder: (context) => BottomScreen(
+                                  name: "වී",
+                                  price: double.parse(billProvider.paddy!),
+                                )),
+                        imgName: "vee.png",
                         name: "වී",
-                        price: double.parse(billProvider.paddy!),
-                      )),
-              imgName: "vee.png",
-              name: "වී",
-              color: Colors.red,
-            ),
-            ITile(
-              function: () => showModalBottomSheet(
-                  context: context,
-                  builder: (context) => BottomScreen(
-                        name: "පොල්තෙල්",
-                        price: double.parse(billProvider.coconut!),
-                      )),
-              imgName: "polthel.png",
-              name: 'පොල්තෙල්',
-              color: Colors.blue,
-            ),
-            ITile(
-              function: () => showModalBottomSheet(
-                  context: context,
-                  builder: (context) => BottomScreen(
+                        color: Colors.red,
+                      ),
+                      ITile(
+                        function: () => showModalBottomSheet(
+                            context: context,
+                            builder: (context) => BottomScreen(
+                                  name: "පොල්තෙල්",
+                                  price: double.parse(billProvider.coconut!),
+                                )),
+                        imgName: "polthel.png",
+                        name: 'පොල්තෙල්',
+                        color: Colors.blue,
+                      ),
+                      ITile(
+                        function: () => showModalBottomSheet(
+                            context: context,
+                            builder: (context) => BottomScreen(
+                                  name: "හාල් පිටි/මුං",
+                                  price: double.parse(billProvider.rice!),
+                                )),
+                        imgName: "piti.png",
                         name: "හාල් පිටි/මුං",
-                        price: double.parse(billProvider.rice!),
-                      )),
-              imgName: "piti.png",
-              name: "හාල් පිටි/මුං",
-              color: Colors.teal,
+                        color: Colors.teal,
+                      ),
+                      ITile(
+                        function: () => showModalBottomSheet(
+                            context: context,
+                            builder: (context) => BottomScreen(
+                                  name: "මිරිස්/කහ/සිල්ලර",
+                                  price: double.parse(billProvider.chilly!),
+                                )),
+                        imgName: "miriskudu.png",
+                        name: 'මිරිස්/කහ/සිල්ලර',
+                        color: Colors.orange,
+                      ),
+                    ]),
+              ),
             ),
-            ITile(
-              function: () => showModalBottomSheet(
-                  context: context,
-                  builder: (context) => BottomScreen(
-                        name: "මිරිස්/කහ/සිල්ලර",
-                        price: double.parse(billProvider.chilly!),
-                      )),
-              imgName: "miriskudu.png",
-              name: 'මිරිස්/කහ/සිල්ලර',
-              color: Colors.orange,
-            ),
-          ]),
-        ),
-      ),
     );
   }
 }

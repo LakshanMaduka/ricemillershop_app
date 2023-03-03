@@ -21,11 +21,11 @@ class settingWidget extends StatelessWidget {
       ),
       body: Column(
         children: [
-          ElevatedButton(
-              onPressed: () {
-                billProvider.calculateIncomeDay();
-              },
-              child: Text('test')),
+          // ElevatedButton(
+          //     onPressed: () {
+          //       billProvider.calculateIncomeMonth();
+          //     },
+          //     child: Text('test')),
           PriceTile(
             name: "වී",
             price: data!["වී"].toString(),

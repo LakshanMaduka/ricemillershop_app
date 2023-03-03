@@ -5,22 +5,54 @@ import 'package:firebase_core/firebase_core.dart';
 import '../providers/ListOfBills.dart';
 import '../providers/billList.dart';
 
-class IncomeScreen extends StatelessWidget {
+class IncomeScreen extends StatefulWidget {
   const IncomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<IncomeScreen> createState() => _IncomeScreenState();
+}
+
+class _IncomeScreenState extends State<IncomeScreen> {
   // Stream<List<ListOfBills>> readBills() => FirebaseFirestore.instance
-  //     .collection('ebills')
-  //     .snapshots()
-  //     .map((snapshot) =>
-  //         snapshot.docs.map((e) => ListOfBills.fromJson(e.data())).toList());
+  bool isLoading = false;
+  bool _isinit = true;
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    setState(() {
+      isLoading = true;
+    });
+    if (_isinit) {
+      Provider.of<BillListprovider>(context, listen: false)
+          .calculateIncomeDay()
+          .then((value) => Provider.of<BillListprovider>(context, listen: false)
+              .calculateIncomeMonth())
+          .then((value) {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    }
+    _isinit = false;
+
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final billProvider = Provider.of<BillListprovider>(context, listen: false);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Income'),
+          title: const Text('Income'),
           centerTitle: true,
-          bottom: TabBar(tabs: [
+          bottom: const TabBar(tabs: [
             Tab(
               text: 'Daily',
             ),
@@ -29,87 +61,84 @@ class IncomeScreen extends StatelessWidget {
             )
           ]),
         ),
-        body: FutureBuilder<ListOfBills?>(
-            future: readBills(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                final bills = snapshot.data!;
-                print(bills.dt);
-                // double? totalSum;
-                // bills.map((e) {
-                //   e.list!.forEach((element) {
-                //     totalSum = (totalSum! + element.total!);
-                //   });
-                // });
-                return TabView();
-              } else if (snapshot.hasError) {
-                return Text("has an error");
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            }),
+        body: isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : TabView(
+                totalIncomD: billProvider.total.toString(),
+                totalIncomeM: billProvider.totalM.toString(),
+              ),
       ),
     );
-  }
-
-  Future<ListOfBills?> readBills() async {
-    final docBill = FirebaseFirestore.instance
-        .collection('ebills')
-        .doc('2023-02-26 06:11:59');
-    final snapshot = await docBill.get();
-
-    if (snapshot.exists) {
-      return ListOfBills.fromJson(snapshot.data()!);
-    }
   }
 }
 
 class TabView extends StatelessWidget {
-  String? totalIncom;
+  String? totalIncomD;
+  String? totalIncomeM;
   TabView({
-    this.totalIncom,
+    this.totalIncomD,
+    this.totalIncomeM,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TabBarView(children: [
-      Container(
-        child: Center(
-            child: Container(
-          margin: EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Colors.white,
-          ),
-          height: 200,
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'අද දින ආදායම',
-                style: TextStyle(fontSize: 25),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                totalIncom!,
-                style: TextStyle(fontSize: 30),
-              )
-            ],
-          ),
-        )),
-        height: 100,
-        color: Colors.cyan,
+      TabBody(
+        totalIncom: totalIncomD,
+        text: 'අද දින ආදායම',
       ),
-      Container(
-        height: 250,
-        color: Colors.cyan,
+      TabBody(
+        totalIncom: totalIncomeM,
+        text: 'මෙම මස ආදායම',
       ),
     ]);
+  }
+}
+
+class TabBody extends StatelessWidget {
+  String? text;
+  TabBody({
+    this.text,
+    Key? key,
+    required this.totalIncom,
+  }) : super(key: key);
+
+  final String? totalIncom;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Center(
+          child: Container(
+        margin: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.white,
+        ),
+        height: 200,
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              text!,
+              style: TextStyle(fontSize: 25),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              totalIncom!,
+              style: TextStyle(fontSize: 30),
+            )
+          ],
+        ),
+      )),
+      height: 100,
+      color: Colors.cyan,
+    );
   }
 }

@@ -13,7 +13,6 @@ class BillListprovider extends ChangeNotifier {
     return UnmodifiableListView(_bills);
   }
 
-  double? total = 0;
   String? rice = null;
   String? paddy = null;
   String? chilly = null;
@@ -72,10 +71,10 @@ class BillListprovider extends ChangeNotifier {
   //     .map((snapshot) =>
   //         snapshot.docs.map((e) => ListOfBills.fromJson(e.data())).toList());
 
-  void getPrices() {
+  Future getPrices() async {
     // final prices = firestore.collection('prices').doc('prices').get();
 
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('prices')
         .doc('prices')
         .get()
@@ -93,8 +92,11 @@ class BillListprovider extends ChangeNotifier {
     // print(prices);
   }
 
-  void calculateIncomeDay() {
-    FirebaseFirestore.instance
+  double? total = 0;
+  double? totalM = 0;
+  Future calculateIncomeDay() async {
+    total = 0;
+    await FirebaseFirestore.instance
         .collection('ebills')
         .where(
           'day',
@@ -106,6 +108,29 @@ class BillListprovider extends ChangeNotifier {
         element.data()['list'].map((e) => total = total! + e['total']).toList();
       });
     });
+    notifyListeners();
+    print(total);
+  }
+
+  Future calculateIncomeMonth() async {
+    totalM = 0;
+    await FirebaseFirestore.instance
+        .collection('ebills')
+        .where(
+          'month',
+          isEqualTo: DateFormat('MM').format(DateTime.now()),
+        )
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        element
+            .data()['list']
+            .map((e) => totalM = totalM! + e['total'])
+            .toList();
+      });
+    });
+    notifyListeners();
+    
   }
 
   void removeTask(int index) {

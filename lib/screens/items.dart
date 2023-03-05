@@ -40,7 +40,7 @@ class _ItemScreenState extends State<ItemScreen> {
     }
     _isinit = false;
 
-    // TODO: implement didChangeDependencies
+    
     super.didChangeDependencies();
   }
 
@@ -101,6 +101,17 @@ class _ItemScreenState extends State<ItemScreen> {
                         imgName: "miriskudu.png",
                         name: 'මිරිස්/කහ/සිල්ලර',
                         color: Colors.orange,
+                      ),
+                      ITile(
+                        function: () => showModalBottomSheet(
+                            context: context,
+                            builder: (context) => BottomScreen(
+                                  name: "හාල් නිවුඩු",
+                                  price: double.parse(billProvider.niwudu!),
+                                )),
+                        imgName: "niwudu.png",
+                        name: "හාල් නිවුඩු",
+                        color: Colors.purple,
                       ),
                     ]),
               ),

@@ -111,11 +111,13 @@ class TabBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 200,
+      color: Colors.cyan,
       child: Center(
           child: Container(
-        margin: EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(100),
           color: Colors.white,
         ),
         height: 200,
@@ -125,20 +127,18 @@ class TabBody extends StatelessWidget {
           children: [
             Text(
               text!,
-              style: TextStyle(fontSize: 25),
+              style: const TextStyle(fontSize: 25),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Text(
-              totalIncom!,
-              style: TextStyle(fontSize: 30),
+              'Rs. ${totalIncom!}',
+              style: const TextStyle(fontSize: 30),
             )
           ],
         ),
       )),
-      height: 100,
-      color: Colors.cyan,
     );
   }
 }

@@ -17,6 +17,7 @@ class BillListprovider extends ChangeNotifier {
   String? paddy = null;
   String? chilly = null;
   String? coconut = null;
+  String? niwudu = null;
 
   var mymap = {};
   //FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -42,6 +43,8 @@ class BillListprovider extends ChangeNotifier {
       'month': DateFormat('MM').format(DateTime.now()),
       'dateTilme': DateFormat('yyyy-MM-dd  KK:mm:ss').format(DateTime.now()),
       'list': bills.map((e) => e.toJson()).toList(),
+      'cash': cash,
+      'change': change
     });
     //await ebills.doc(DateTime.now().toString()).set({});
   }
@@ -86,10 +89,18 @@ class BillListprovider extends ChangeNotifier {
         paddy = data['වී'];
         chilly = data['මිරිස්-සිල්ලර-කහ'];
         coconut = data['පොල්තෙල්'];
+        niwudu = data['හාල්-නිවුඩු'];
       }
     });
 
     // print(prices);
+  }
+
+  String? cash = '0';
+  double? change = 0;
+  void calculateChange(String? value) {
+    cash = value;
+    change = double.parse(cash!) - gettotal();
   }
 
   double? total = 0;
@@ -109,7 +120,6 @@ class BillListprovider extends ChangeNotifier {
       });
     });
     notifyListeners();
-    print(total);
   }
 
   Future calculateIncomeMonth() async {
@@ -130,7 +140,97 @@ class BillListprovider extends ChangeNotifier {
       });
     });
     notifyListeners();
-    
+  }
+
+  double? totalPaddyD;
+  double? totalChillyD;
+  double? totalRiceD;
+  double? totalCoconutD;
+  double? totalNiwuduD;
+
+  Future chartDataDay() async {
+    totalPaddyD = 0;
+    totalChillyD = 0;
+    totalRiceD = 0;
+    totalCoconutD = 0;
+    totalNiwuduD = 0;
+    await FirebaseFirestore.instance
+        .collection('ebills')
+        .where(
+          'day',
+          isEqualTo: DateFormat('dd').format(DateTime.now()),
+        )
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        element.data()['list'].map((e) {
+          if (e['title'] == 'වී') {
+            totalPaddyD = totalPaddyD! + e['total'];
+          } else if (e['title'] == 'හාල් පිටි/මුං') {
+            totalRiceD = totalRiceD! + e['total'];
+          } else if (e['title'] == 'මිරිස්/කහ/සිල්ලර') {
+            totalChillyD = totalChillyD! + e['total'];
+          } else if (e['title'] == 'පොල්තෙල්') {
+            totalCoconutD = totalCoconutD! + e['total'];
+          } else if (e['title'] == 'හාල් නිවුඩු') {
+            totalNiwuduD = totalNiwuduD! + e['total'];
+          }
+          ;
+        }).toList();
+      });
+    });
+    print(totalPaddyD);
+    print(totalRiceD);
+    print(totalChillyD);
+    print(totalCoconutD);
+    print(totalNiwuduD);
+    print(' ');
+    notifyListeners();
+  }
+
+  double? totalPaddyM;
+  double? totalChillyM;
+  double? totalRiceM;
+  double? totalCoconutM;
+  double? totalNiwuduM;
+
+  Future chartDataMonth() async {
+    totalPaddyM = 0;
+    totalChillyM = 0;
+    totalRiceM = 0;
+    totalCoconutM = 0;
+    totalNiwuduM = 0;
+    await FirebaseFirestore.instance
+        .collection('ebills')
+        .where(
+          'month',
+          isEqualTo: DateFormat('MM').format(DateTime.now()),
+        )
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        element.data()['list'].map((e) {
+          if (e['title'] == 'වී') {
+            totalPaddyM = totalPaddyM! + e['total'];
+          } else if (e['title'] == 'හාල් පිටි/මුං') {
+            totalRiceM = totalRiceM! + e['total'];
+          } else if (e['title'] == 'මිරිස්/කහ/සිල්ලර') {
+            totalChillyM = totalChillyM! + e['total'];
+          } else if (e['title'] == 'පොල්තෙල්') {
+            totalCoconutM = totalCoconutM! + e['total'];
+          } else if (e['title'] == 'හාල් නිවුඩු') {
+            totalNiwuduM = totalNiwuduM! + e['total'];
+          }
+          ;
+        }).toList();
+      });
+    });
+    print(totalPaddyM);
+    print(totalRiceM);
+    print(totalChillyM);
+    print(totalCoconutM);
+    print(totalNiwuduM);
+    notifyListeners();
   }
 
   void removeTask(int index) {
@@ -138,11 +238,14 @@ class BillListprovider extends ChangeNotifier {
     notifyListeners();
   }
 
+  double? totalBill;
+
   double gettotal() {
     double _total = 0.0;
     for (var element in _bills) {
       _total += element.total!;
     }
+    totalBill = _total;
     return _total;
   }
 

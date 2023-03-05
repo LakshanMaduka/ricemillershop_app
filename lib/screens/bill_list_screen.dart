@@ -1,4 +1,5 @@
 import 'package:application_1/components/billListView.dart';
+import 'package:application_1/components/bottomScomp.dart';
 //import 'package:application_1/providers/BillList.dart';
 import 'package:application_1/providers/billList.dart';
 import 'package:flutter/material.dart';
@@ -59,8 +60,30 @@ class _BillListScreenState extends State<BillListScreen> {
                         children: [
                           TextButton(
                             onPressed: () {
+                              billProvider.emtyList();
+                              QuickAlert.show(
+                                  text: 'Do you want to cancel the bill?',
+                                  onConfirmBtnTap: () {
+                                    Navigator.pop(context);
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context, '/', (route) => false);
+                                  },
+                                  context: context,
+                                  type: QuickAlertType.confirm);
+                            },
+                            child: const Text('Cancel'),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.lightBlue),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
                               Navigator.pop(context);
-                              Navigator.of(context).pushNamed('itemScreen');
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, 'itemScreen', (route) => false);
                             },
                             child: const Text('Add'),
                             style: ButtonStyle(
@@ -72,44 +95,27 @@ class _BillListScreenState extends State<BillListScreen> {
                           ),
                           TextButton(
                             onPressed: () async {
-                              setState(() {
-                                isLoading = true;
-                              });
-                              QuickAlert.show(
-                                  text: 'Successfully saved the bill',
-                                  onConfirmBtnTap: () {
-                                    billProvider.emtyList();
-                                    billProvider.calculateIncomeDay();
-                                    Navigator.pop(context);
-                                    Navigator.pushReplacementNamed(
-                                        context, '/');
-                                  },
+                              showModalBottomSheet(
                                   context: context,
-                                  type: QuickAlertType.success);
+                                  builder: ((context) => BottomSComp()));
+                              // setState(() {
+                              //   isLoading = true;
+                              // });
+                              // QuickAlert.show(
+                              //     text: 'Successfully saved the bill',
+                              //     onConfirmBtnTap: () {
+                              //       billProvider.emtyList();
+                              //       billProvider.calculateIncomeDay();
+                              //       Navigator.pop(context);
+                              //       Navigator.pushReplacementNamed(
+                              //           context, '/');
+                              //     },
+                              //     context: context,
+                              //     type: QuickAlertType.success);
 
-                              await billProvider.fireSFunction();
+                              // await billProvider.fireSFunction();
                             },
-                            child: const Text('Save'),
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.lightBlue),
-                              foregroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              billProvider.emtyList();
-                              QuickAlert.show(
-                                  text: 'Do you want to cancel the bill?',
-                                  onConfirmBtnTap: () {
-                                    Navigator.pop(context);
-                                    Navigator.popAndPushNamed(context, '/');
-                                  },
-                                  context: context,
-                                  type: QuickAlertType.confirm);
-                            },
-                            child: const Text('Cancel'),
+                            child: const Text('Next'),
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
                                   Colors.lightBlue),

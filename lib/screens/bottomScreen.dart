@@ -62,6 +62,7 @@ class _BottomScreenState extends State<BottomScreen> {
                   onChanged: (value) {
                     setState(() {
                       totalKg = value;
+                      
                     });
                   },
                   autofocus: true,
@@ -91,7 +92,7 @@ class _BottomScreenState extends State<BottomScreen> {
 
                     Navigator.pushNamed(context, "billScreen");
                   },
-                  child: const Text('Add'),
+                  child:  Text('Add'),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
                         Colors.lightBlueAccent),

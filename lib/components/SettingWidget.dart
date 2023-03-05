@@ -21,11 +21,12 @@ class settingWidget extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // ElevatedButton(
-          //     onPressed: () {
-          //       billProvider.calculateIncomeMonth();
-          //     },
-          //     child: Text('test')),
+          ElevatedButton(
+              onPressed: () {
+                billProvider.chartDataDay();
+                billProvider.chartDataMonth();
+              },
+              child: Text('test')),
           PriceTile(
             name: "වී",
             price: data!["වී"].toString(),
@@ -41,6 +42,10 @@ class settingWidget extends StatelessWidget {
           PriceTile(
             name: "හාල්-මුං",
             price: data!["හාල්-මුං"].toString(),
+          ),
+          PriceTile(
+            name: "හාල්-නිවුඩු",
+            price: data!["හාල්-නිවුඩු"].toString(),
           ),
         ],
       ),

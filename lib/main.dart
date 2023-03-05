@@ -1,5 +1,6 @@
 import 'package:application_1/providers/billList.dart';
 import 'package:application_1/providers/prices.dart';
+import 'package:application_1/screens/BillScreen.dart';
 import 'package:application_1/screens/bill_list_screen.dart';
 import 'package:application_1/screens/incomeScreen.dart';
 import 'package:application_1/screens/items.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
           future: Firebase.initializeApp(),
           builder: (context, snapshot) {
             return MaterialApp(
+              debugShowCheckedModeBanner: false,
               title: 'Flutter Demo',
               theme: ThemeData(
                 // This is the theme of your application.
@@ -53,7 +55,8 @@ class MyApp extends StatelessWidget {
                 'itemScreen': (context) => ItemScreen(),
                 'billScreen': (context) => BillListScreen(),
                 'incomeScreen': (context) => IncomeScreen(),
-                'settingScreen': (context) => SettingScreen()
+                'settingScreen': (context) => SettingScreen(),
+                'finalBillScreen': (context) => BillScreen()
               },
             );
           }),

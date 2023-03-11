@@ -1,5 +1,8 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'package:application_1/providers/ChartDataDay.dart';
+import 'package:application_1/providers/ChartDataMonth.dart';
+import 'package:application_1/providers/expenses.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:application_1/providers/Bill.dart';
 import 'package:application_1/providers/ListOfBills.dart';
@@ -45,6 +48,27 @@ class BillListprovider extends ChangeNotifier {
       'list': bills.map((e) => e.toJson()).toList(),
       'cash': cash,
       'change': change
+    });
+    //await ebills.doc(DateTime.now().toString()).set({});
+  }
+
+  Future<void> setExpenses({
+    String? day,
+    String? month,
+    String? dateTime,
+    String? title,
+    String? amount,
+  }) async {
+    CollectionReference ebills =
+        FirebaseFirestore.instance.collection("expenses");
+    await ebills
+        .doc(DateFormat('yyyy-MM-dd  KK:mm:ss').format(DateTime.now()))
+        .set({
+      'day': day,
+      'month': month,
+      'title': title,
+      'dateTime': DateFormat('yyyy-MM-dd  KK:mm:ss').format(DateTime.now()),
+      'amount': amount,
     });
     //await ebills.doc(DateTime.now().toString()).set({});
   }
@@ -142,6 +166,55 @@ class BillListprovider extends ChangeNotifier {
     notifyListeners();
   }
 
+// get Expenses
+
+  Stream<List<Expense>> getExpenses() {
+    return FirebaseFirestore.instance.collection('expenses').snapshots().map(
+        (snapshot) => snapshot.docs.reversed
+            .map((doc) => Expense.fromJason(doc.data()))
+            .toList());
+  }
+
+  //get Day Expenses
+  double? totalDayExpense;
+  Future calculateDayExpenses() async {
+    totalDayExpense = 0;
+    await FirebaseFirestore.instance
+        .collection('expenses')
+        .where(
+          'day',
+          isEqualTo: DateFormat('dd').format(DateTime.now()),
+        )
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        totalDayExpense =
+            totalDayExpense! + double.parse(element.data()['amount']);
+      });
+    });
+    //  notifyListeners();
+  }
+
+  //get Day Expenses
+  double? totalMonthExpense;
+  Future calculateMonthExpenses() async {
+    totalMonthExpense = 0;
+    await FirebaseFirestore.instance
+        .collection('expenses')
+        .where(
+          'month',
+          isEqualTo: DateFormat('MM').format(DateTime.now()),
+        )
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        totalMonthExpense =
+            totalMonthExpense! + double.parse(element.data()['amount']);
+      });
+    });
+    // notifyListeners();
+  }
+
   double? totalPaddyD;
   double? totalChillyD;
   double? totalRiceD;
@@ -179,12 +252,7 @@ class BillListprovider extends ChangeNotifier {
         }).toList();
       });
     });
-    print(totalPaddyD);
-    print(totalRiceD);
-    print(totalChillyD);
-    print(totalCoconutD);
-    print(totalNiwuduD);
-    print(' ');
+
     notifyListeners();
   }
 
@@ -225,12 +293,30 @@ class BillListprovider extends ChangeNotifier {
         }).toList();
       });
     });
-    print(totalPaddyM);
-    print(totalRiceM);
-    print(totalChillyM);
-    print(totalCoconutM);
-    print(totalNiwuduM);
+
     notifyListeners();
+  }
+
+  List<ChartDataDay> getChartDayData() {
+    final List<ChartDataDay> chartData = [
+      ChartDataDay(continent: "වී", gdp: totalPaddyD!.toInt()),
+      ChartDataDay(continent: "හා/මු", gdp: totalRiceD!.toInt()),
+      ChartDataDay(continent: "මි/සි/ක", gdp: totalChillyD!.toInt()),
+      ChartDataDay(continent: "පො", gdp: totalCoconutD!.toInt()),
+      ChartDataDay(continent: "නි", gdp: totalNiwuduD!.toInt()),
+    ];
+    return chartData;
+  }
+
+  List<ChartDataMonth> getChartMonthData() {
+    final List<ChartDataMonth> chartData = [
+      ChartDataMonth(continent: "වී", gdp: totalPaddyM!.toInt()),
+      ChartDataMonth(continent: "හා/මු", gdp: totalRiceM!.toInt()),
+      ChartDataMonth(continent: "මි/සි/ක", gdp: totalChillyM!.toInt()),
+      ChartDataMonth(continent: "පො", gdp: totalCoconutM!.toInt()),
+      ChartDataMonth(continent: "නි", gdp: totalNiwuduM!.toInt()),
+    ];
+    return chartData;
   }
 
   void removeTask(int index) {

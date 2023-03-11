@@ -17,7 +17,7 @@ class BillView extends StatelessWidget {
               type: billProvider.bills[index].title,
               amount: billProvider.bills[index].noOfKg,
               dateTime: billProvider.bills[index].dateTime.toString(),
-              total: billProvider.bills[index].total.toString(),
+              total: billProvider.bills[index].total!.toStringAsFixed(2),
             ));
   }
 }

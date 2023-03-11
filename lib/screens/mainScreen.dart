@@ -37,6 +37,7 @@ class _MainScreenState extends State<MainScreen> {
             name: "වියදම්",
             icon: Icons.wallet,
             color: Colors.blue,
+            function: () => Navigator.pushNamed(context, 'expensesScreen'),
           ),
           GTile(
             name: "සැකසුම්",
@@ -48,6 +49,7 @@ class _MainScreenState extends State<MainScreen> {
             name: "ලාභය",
             icon: Icons.add_chart,
             color: Colors.orange,
+            function: () => Navigator.pushNamed(context, 'profitScreen'),
           ),
         ]),
       ),

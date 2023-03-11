@@ -46,7 +46,7 @@ class _BillListScreenState extends State<BillListScreen> {
                             Consumer<BillListprovider>(
                                 builder: (context, value, child) {
                               return Text(
-                                "රු. " + value.gettotal().toString(),
+                                "රු. " + value.gettotal().toStringAsFixed(2),
                                 style: TextStyle(fontSize: 25),
                               );
                             })

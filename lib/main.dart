@@ -2,9 +2,11 @@ import 'package:application_1/providers/billList.dart';
 import 'package:application_1/providers/prices.dart';
 import 'package:application_1/screens/BillScreen.dart';
 import 'package:application_1/screens/bill_list_screen.dart';
+import 'package:application_1/screens/expensesScreen.dart';
 import 'package:application_1/screens/incomeScreen.dart';
 import 'package:application_1/screens/items.dart';
 import 'package:application_1/screens/mainScreen.dart';
+import 'package:application_1/screens/profitScreen.dart';
 import 'package:application_1/screens/settingScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +58,9 @@ class MyApp extends StatelessWidget {
                 'billScreen': (context) => BillListScreen(),
                 'incomeScreen': (context) => IncomeScreen(),
                 'settingScreen': (context) => SettingScreen(),
-                'finalBillScreen': (context) => BillScreen()
+                'finalBillScreen': (context) => BillScreen(),
+                'expensesScreen': (context) => ExpensesScreen(),
+                'profitScreen': (context) => ProfitScreen(),
               },
             );
           }),

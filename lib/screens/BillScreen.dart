@@ -67,7 +67,8 @@ class _BillScreenState extends State<BillScreen> {
                                     fontSize: 20, fontWeight: FontWeight.bold),
                               ),
                               trailing: Text(
-                                'Rs.' + billProvider.totalBill.toString(),
+                                'Rs.' +
+                                    billProvider.totalBill!.toStringAsFixed(2),
                                 style: const TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold),
                               ),
@@ -85,7 +86,9 @@ class _BillScreenState extends State<BillScreen> {
                                     fontSize: 20, fontWeight: FontWeight.bold),
                               ),
                               trailing: Text(
-                                'Rs.' + billProvider.cash!,
+                                'Rs.' +
+                                    double.parse(billProvider.cash!)
+                                        .toStringAsFixed(2),
                                 style: const TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold),
                               ),
@@ -93,8 +96,8 @@ class _BillScreenState extends State<BillScreen> {
                             const Divider(
                               color: Colors.black,
                               height: 2,
-                              indent: 20,
-                              endIndent: 20,
+                              indent: 15,
+                              endIndent: 15,
                             ),
                             ListTile(
                               dense: true,
@@ -104,7 +107,7 @@ class _BillScreenState extends State<BillScreen> {
                                     fontSize: 25, fontWeight: FontWeight.bold),
                               ),
                               trailing: Text(
-                                'Rs.' + billProvider.change!.toString(),
+                                'Rs.' + billProvider.change!.toStringAsFixed(2),
                                 style: const TextStyle(
                                     fontSize: 25, fontWeight: FontWeight.bold),
                               ),

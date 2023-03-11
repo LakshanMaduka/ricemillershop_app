@@ -23,8 +23,7 @@ class settingWidget extends StatelessWidget {
         children: [
           ElevatedButton(
               onPressed: () {
-                billProvider.calculateDayExpenses();
-                billProvider.calculateMonthExpenses();
+                billProvider.calculateProfit();
               },
               child: Text('test')),
           PriceTile(

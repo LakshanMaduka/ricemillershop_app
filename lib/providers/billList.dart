@@ -319,6 +319,21 @@ class BillListprovider extends ChangeNotifier {
     return chartData;
   }
 
+  double? totalProfitDay;
+  double? totalProfitMonth;
+  Future calculateProfit() async {
+    totalProfitDay = 0;
+    totalProfitMonth = 0;
+    await calculateIncomeDay();
+    await calculateIncomeMonth();
+    await calculateDayExpenses();
+    await calculateMonthExpenses();
+    totalProfitDay = total! - totalDayExpense!;
+    totalProfitMonth = totalM! - totalMonthExpense!;
+    print(totalProfitDay);
+    print(totalProfitMonth);
+  }
+
   void removeTask(int index) {
     _bills.removeAt(index);
     notifyListeners();
